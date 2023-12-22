@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/sagun03/RealTime-Chat#readme",
   "dependencies": {
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "websocket": "^1.0.34"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5"
   }
 }
