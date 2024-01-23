@@ -32,7 +32,7 @@ const wsServer = new WebSocketServer({
   // facilities built into the protocol and the browser.  You should
   // *always* verify the connection's origin and decide whether or not
   // to accept it.
-  autoAcceptConnections: true,
+  autoAcceptConnections: false,
 });
 
 function originIsAllowed(origin: any) {
@@ -70,14 +70,16 @@ function messageHandler(ws: connection, message: IncomingMessage) {
   }
   if (message.type === SupportedMessage.UpVote) {
     const payload = message.payload;
-    store.upvote(payload.userId, payload.roomId, payload.chatId);
-
+   const chat = store.upvote(payload.userId, payload.roomId, payload.chatId);
+    if (!chat) {
+        return;
+    }
     const outGoingPayload: OutgoingMessage = {
       type: OutGoingSupportedMessage.updatedChat,
       payload: {
         chatId: payload.chatId,
         roomId: payload.roomId,
-        upvotes: 0,
+        upvotes: chat.upvotes.length,
       },
     };
     userManager.broadcast(payload.roomId, payload.userId, outGoingPayload);
